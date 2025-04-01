@@ -39,7 +39,7 @@ final class OptionalViewTests: XCTestCase {
     func testSearch() throws {
         let view1 = AnyView(MixedOptionalView(flag: true))
         let view2 = AnyView(MixedOptionalView(flag: false))
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try view1.inspect().find(text: "ABC").pathToRoot,
                        "anyView().view(MixedOptionalView.self).hStack().text(0)")
         XCTAssertEqual(try view1.inspect().find(text: "XYZ").pathToRoot,

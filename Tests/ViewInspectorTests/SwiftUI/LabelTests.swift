@@ -99,7 +99,7 @@ final class GlobalModifiersForLabel: XCTestCase {
             "styleConfigurationTitle() found EmptyView instead of LabelStyleConfiguration.Title")
         XCTAssertThrows(try EmptyView().inspect().styleConfigurationIcon(),
             "styleConfigurationIcon() found EmptyView instead of LabelStyleConfiguration.Icon")
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.inspect().find(ViewType.StyleConfiguration.Title.self).pathToRoot,
                        "vStack().styleConfigurationTitle(0)")
         XCTAssertEqual(try sut.inspect().find(ViewType.StyleConfiguration.Icon.self).pathToRoot,

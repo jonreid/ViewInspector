@@ -61,7 +61,7 @@ final class FullScreenCoverTests: XCTestCase {
         }
         let title = try sut.inspect().implicitAnyView().emptyView().fullScreenCover().text()
         XCTAssertEqual(try title.string(), "abc")
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(title.pathToRoot, "emptyView().fullScreenCover().text()")
         #else
         XCTAssertEqual(title.pathToRoot, "anyView().emptyView().fullScreenCover().text()")
@@ -79,7 +79,7 @@ final class FullScreenCoverTests: XCTestCase {
         let button = try sut.inspect().implicitAnyView().emptyView().fullScreenCover().button(1)
         try button.tap()
         XCTAssertFalse(binding.wrappedValue)
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(button.pathToRoot, "emptyView().fullScreenCover().button(1)")
         #else
         XCTAssertEqual(button.pathToRoot, "anyView().emptyView().fullScreenCover().button(1)")
@@ -95,7 +95,7 @@ final class FullScreenCoverTests: XCTestCase {
             exp.fulfill()
         }, content: { Text("") })
         XCTAssertTrue(binding.wrappedValue)
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         try sut.inspect().fullScreenCover().dismiss()
         XCTAssertFalse(binding.wrappedValue)
         XCTAssertThrows(try sut.inspect().fullScreenCover(), "View for FullScreenCover is absent")
@@ -128,7 +128,7 @@ final class FullScreenCoverTests: XCTestCase {
         let binding3 = Binding(wrappedValue: true)
         let sut = FullScreenCoverFindTestView(
             fullScreenCover1: binding1, fullScreenCover2: binding2, fullScreenCover3: binding3)
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let title1 = try sut.inspect().hStack().emptyView(0).fullScreenCover().text(0)
         XCTAssertEqual(try title1.string(), "title_1")
         XCTAssertEqual(title1.pathToRoot,
@@ -142,7 +142,7 @@ final class FullScreenCoverTests: XCTestCase {
             .anyView().emptyView().fullScreenCover().text(0)
             """)
         #endif
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let title2 = try sut.inspect().implicitAnyView().hStack().emptyView(0).fullScreenCover(1).text(0)
         XCTAssertEqual(try title2.string(), "title_3")
         XCTAssertEqual(title2.pathToRoot,
@@ -170,7 +170,7 @@ final class FullScreenCoverTests: XCTestCase {
             fullScreenCover1: binding, fullScreenCover2: binding, fullScreenCover3: binding)
 
         // 1
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.inspect().find(text: "title_1").pathToRoot,
             "view(FullScreenCoverFindTestView.self).hStack().emptyView(0).sheet().text(0)")
         XCTAssertEqual(try sut.inspect().find(text: "button_1").pathToRoot,
@@ -197,7 +197,7 @@ final class FullScreenCoverTests: XCTestCase {
         // 3
         XCTAssertThrows(try sut.inspect().find(text: "message_3").pathToRoot,
             "Search did not find a match")
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.inspect().find(text: "title_3").pathToRoot,
             "view(FullScreenCoverFindTestView.self).hStack().emptyView(0).sheet(1).text(0)")
         XCTAssertEqual(try sut.inspect().find(text: "button_3").pathToRoot,

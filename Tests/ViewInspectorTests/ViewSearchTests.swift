@@ -97,7 +97,7 @@ final class ViewSearchTests: XCTestCase {
         let testView = Test.MainView()
         XCTAssertEqual(try testView.inspect().find(text: "123").pathToRoot,
         "view(MainView.self).anyView().group().text(1)")
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try testView.inspect().find(text: "Test_en").pathToRoot,
         """
         view(MainView.self).anyView().group().emptyView(0).overlay().hStack()\
@@ -228,7 +228,7 @@ final class ViewSearchTests: XCTestCase {
         else { throw XCTSkip() }
         let style = Test.ConflictingViewTypeNamesStyle()
         let sut = try style.inspect(isPressed: true)
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.find(text: "empty").pathToRoot,
                        "group().view(EmptyView.self, 0).text()")
         XCTAssertEqual(try sut.find(ViewType.Label.self).pathToRoot,
@@ -284,7 +284,7 @@ extension ViewSearchTests {
         guard #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
         else { throw XCTSkip() }
         let sut = Test.AccessibleView()
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.inspect().find(viewWithAccessibilityLabel: "text1_access").pathToRoot,
                        "view(AccessibleView.self).button().labelView().hStack().text(0)")
         #else
@@ -301,7 +301,7 @@ extension ViewSearchTests {
         guard #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
         else { throw XCTSkip() }
         let sut = Test.AccessibleView()
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.inspect().find(viewWithAccessibilityIdentifier: "text2_access").pathToRoot,
                        "view(AccessibleView.self).button().mask().group().text(0)")
         #else

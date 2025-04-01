@@ -50,7 +50,7 @@ final class ActionSheetTests: XCTestCase {
         let sut = EmptyView().actionSheet2(isPresented: binding) {
             ActionSheet(title: Text("abc"))
         }
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let title = try sut.inspect().emptyView().actionSheet().title()
         XCTAssertEqual(try title.string(), "abc")
         XCTAssertEqual(title.pathToRoot, "emptyView().actionSheet().title()")
@@ -66,7 +66,7 @@ final class ActionSheetTests: XCTestCase {
         let sut = EmptyView().actionSheet2(isPresented: binding) {
             ActionSheet(title: Text("abc"), message: Text("123"))
         }
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let message = try sut.inspect().emptyView().actionSheet().message()
         XCTAssertEqual(try message.string(), "123")
         XCTAssertEqual(message.pathToRoot, "emptyView().actionSheet().message()")
@@ -100,7 +100,7 @@ final class ActionSheetTests: XCTestCase {
         XCTAssertEqual(try btn1.labelView().string(), "b1")
         XCTAssertEqual(try btn2.labelView().string(), "b2")
         XCTAssertEqual(try btn3.labelView().string(), "b3")
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try btn1.labelView().pathToRoot, "emptyView().actionSheet().button(0).labelView()")
         XCTAssertEqual(try btn2.labelView().pathToRoot, "emptyView().actionSheet().button(1).labelView()")
         XCTAssertEqual(try btn3.labelView().pathToRoot, "emptyView().actionSheet().button(2).labelView()")
@@ -180,7 +180,7 @@ final class ActionSheetTests: XCTestCase {
         let binding3 = Binding(wrappedValue: true)
         let sut = ActionSheetFindTestView(sheet1: binding1, sheet2: binding2, sheet3: binding3)
 
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let title1 = try sut.inspect().hStack().emptyView(0).actionSheet().title()
         XCTAssertEqual(try title1.string(), "title_1")
         XCTAssertEqual(title1.pathToRoot,
@@ -220,7 +220,7 @@ final class ActionSheetTests: XCTestCase {
         let sut = ActionSheetFindTestView(sheet1: binding, sheet2: binding, sheet3: binding)
         
         // 1
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.inspect().find(text: "title_1").pathToRoot,
             "view(ActionSheetFindTestView.self).hStack().emptyView(0).actionSheet().title()")
         XCTAssertEqual(try sut.inspect().find(text: "message_1").pathToRoot,
@@ -255,7 +255,7 @@ final class ActionSheetTests: XCTestCase {
         XCTAssertThrows(try sut.inspect().find(text: "title_2").pathToRoot, noMatchMessage)
         
         // 3
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.inspect().find(text: "title_3").pathToRoot,
             "view(ActionSheetFindTestView.self).hStack().emptyView(0).actionSheet(1).title()")
         
@@ -273,7 +273,7 @@ final class ActionSheetTests: XCTestCase {
     }
     
     func testAlertVsActionSheetMessage() throws {
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let sut = try PopupMixTestView().inspect().emptyView()
         let alert = try sut.alert()
         #else

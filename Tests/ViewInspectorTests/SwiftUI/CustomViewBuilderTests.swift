@@ -94,7 +94,7 @@ final class CustomViewBuilderTests: XCTestCase {
         }
         let sut = try view.inspect()
         let path1 = try sut.find(text: "Test").pathToRoot
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let path2 = try sut.hStack().view(TestViewBuilderView<EmptyView>.self, 0).text(0).pathToRoot
         XCTAssertEqual(path1, "hStack().view(TestViewBuilderView<EmptyView>.self, 0).text(0)")
         XCTAssertEqual(path2, "hStack().view(TestViewBuilderView<EmptyView>.self, 0).text(0)")
@@ -120,7 +120,7 @@ final class CustomViewBuilderTests: XCTestCase {
         let sut = try view.inspect()
         XCTAssertNoThrow(try sut.find(ViewWrapper<ViewWrapper<Text>>.self))
         XCTAssertNoThrow(try sut.find(ViewWrapper<Text>.self))
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.find(ViewType.Text.self).pathToRoot,
                        "view(ViewWrapper<EmptyView>.self).view(ViewWrapper<EmptyView>.self).text()")
         #else

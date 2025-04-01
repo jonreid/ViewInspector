@@ -79,7 +79,7 @@ final class ViewThatFitsTests: XCTestCase {
         guard #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *)
         else { throw XCTSkip() }
         let view = AnyView(TestViewThatFits())
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try view.inspect().find(text: TestViewThatFits.longString).pathToRoot,
             "anyView().view(TestViewThatFits.self).viewThatFits().text(0)")
         XCTAssertEqual(try view.inspect().find(text: TestViewThatFits.shortString).pathToRoot,
