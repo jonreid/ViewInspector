@@ -106,7 +106,7 @@ final class ProgressViewTests: XCTestCase {
         """)
         XCTAssertEqual(try sut.inspect(fractionCompleted: 0.42).implicitAnyView()
                         .vStack().text(2).string(), "Completed: 42%")
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.inspect().find(ViewType.StyleConfiguration.Label.self).pathToRoot,
                        "vStack().styleConfigurationLabel(0)")
         XCTAssertEqual(try sut.inspect().find(ViewType.StyleConfiguration.CurrentValueLabel.self).pathToRoot,

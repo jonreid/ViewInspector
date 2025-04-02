@@ -10,7 +10,7 @@ final class TransitiveModifiersTests: XCTestCase {
         let sut = try HittenTestView().inspect()
         XCTAssertFalse(try sut.find(text: "abc").isHidden())
         XCTAssertTrue(try sut.find(text: "123").isHidden())
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertThrows(try sut.find(button: "123").tap(),
             "Button is unresponsive: view(HittenTestView.self).vStack().hStack(1) is hidden")
         #else
@@ -24,7 +24,7 @@ final class TransitiveModifiersTests: XCTestCase {
         XCTAssertFalse(try sut.find(button: "1").isDisabled())
         XCTAssertFalse(try sut.find(button: "2").isDisabled())
         XCTAssertTrue(try sut.find(button: "3").isDisabled())
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertThrows(try sut.find(button: "3").tap(),
             "Button is unresponsive: view(TestDisabledView.self).vStack().vStack(1).vStack(1) is disabled")
         #else
@@ -70,7 +70,7 @@ final class TransitiveModifiersTests: XCTestCase {
         XCTAssertTrue(try sut.find(button: "1").allowsHitTesting())
         XCTAssertTrue(try sut.find(button: "2").allowsHitTesting())
         XCTAssertFalse(try sut.find(button: "3").allowsHitTesting())
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertThrows(try sut.find(button: "3").tap(),
             """
             Button is unresponsive: view(AllowsHitTestingTestView.self).vStack()\

@@ -63,7 +63,7 @@ final class NavigationLinkTests: XCTestCase {
                        "anyView().navigationView().navigationLink(0)")
         XCTAssertEqual(try view.inspect().find(navigationLink: "Screen 2").pathToRoot,
                        "anyView().navigationView().navigationLink(1)")
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try view.inspect().find(text: "Screen 1").pathToRoot,
                        "anyView().navigationView().navigationLink(0).view(TestView.self).text()")
         #else
@@ -215,7 +215,7 @@ final class NavigationLinkTests: XCTestCase {
             .init(view: TestRecursiveGenericView
                 .init(view: TestRecursiveGenericView
                     .init(view: Text("test"))))
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let container = "view(TestRecursiveGenericView<EmptyView>.self)."
         #else
         let container = "view(TestRecursiveGenericView<EmptyView>.self).anyView()."
@@ -233,7 +233,7 @@ final class NavigationLinkTests: XCTestCase {
                       childs: [
                         .init(name: "A", childs: [.init(name: "A.1"), .init(name: "A.2")]),
                       ]))
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.inspect().find(text: "A.2").pathToRoot,
             """
             view(TestTreeView.self).vStack().forEach(1).view(TestTreeView.self, \

@@ -164,7 +164,7 @@ public extension InspectableView {
     }
 }
 
-#if compiler(<6)
+#if compiler(<6) || compiler(>=6.1)
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
 public extension InspectableView where View: SingleViewContent {
     func implicitAnyView() throws -> InspectableView<View> {

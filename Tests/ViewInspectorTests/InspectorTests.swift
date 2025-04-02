@@ -75,7 +75,7 @@ final class InspectorTests: XCTestCase {
     
     func testPrintValue() {
         let sut = TestPrintView()
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let str = """
                 TestPrintView
                   body: Text
@@ -145,7 +145,7 @@ final class InspectorTests: XCTestCase {
     
     func testPrintTypeReference() {
         let sut = ViewWithTypeReference()
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(Inspector.print(sut), """
             ViewWithTypeReference
               body: EmptyView = EmptyView()
@@ -260,7 +260,7 @@ final class InspectableViewModifiersTests: XCTestCase {
                     TestPrintView().padding()
                 })
            })
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let sut = try view.inspect().anyView().group().emptyView(1).overlay()
             .hStack().view(TestPrintView.self, 1).text()
         #else
@@ -300,7 +300,7 @@ final class InspectableViewModifiersTests: XCTestCase {
         let view2 = TestPrintView()
         let sut3 = try view2.inspect()
         XCTAssertEqual(sut3.pathToRoot, "")
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let sut4 = try view2.inspect().text()
         XCTAssertEqual(sut4.pathToRoot, "view(TestPrintView.self).text()")
         let sut5 = try view2.inspect().text(0)
@@ -323,7 +323,7 @@ final class InspectableViewModifiersTests: XCTestCase {
                     TestPrintView().padding()
                 })
            })
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let sut1 = try view1.inspect().anyView().group().emptyView(1).overlay()
             .hStack().view(TestPrintView.self, 1).text()
         XCTAssertEqual(sut1.pathToRoot,

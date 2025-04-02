@@ -30,7 +30,7 @@ final class TupleViewTests: XCTestCase {
     func testSearch() throws {
         let view1 = TupleInsideTupleView(flag: true)
         let view2 = TupleInsideTupleView(flag: false)
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try view1.inspect().find(text: "xyz").pathToRoot,
                        "view(TupleInsideTupleView.self).hStack().text(0)")
         XCTAssertEqual(try view1.inspect().find(text: "abc").pathToRoot,

@@ -73,7 +73,7 @@ final class CustomViewTests: XCTestCase {
         let explicit = try sut.inspect()
             .view(SimpleTestView.self)
             .implicitAnyView().emptyView().pathToRoot
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(implicit, "view(SimpleTestView.self).emptyView()")
         XCTAssertEqual(explicit, "view(SimpleTestView.self).emptyView()")
         #else
@@ -191,7 +191,7 @@ final class CustomViewTests: XCTestCase {
     }
     
     func testSyncSearch() throws {
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         let sut1 = AnyView(SimpleTestView())
         XCTAssertEqual(try sut1.inspect().find(ViewType.EmptyView.self).pathToRoot,
                        "anyView().view(SimpleTestView.self).emptyView()")
@@ -216,7 +216,7 @@ final class CustomViewTests: XCTestCase {
         let sut = AnyView(view)
         let viewModel = ExternalState()
         let exp = view.inspection.inspect { view in
-            #if compiler(<6)
+            #if compiler(<6) || compiler(>=6.1)
             XCTAssertEqual(try view.find(text: viewModel.value).pathToRoot,
                            "view(EnvironmentStateTestView.self).text()")
             #else
@@ -261,7 +261,7 @@ final class CustomViewTests: XCTestCase {
         let sut = try AnyView(NameMatchViewList()).inspect()
         XCTAssertEqual(try sut.find(NameMatchViewList.self).pathToRoot,
                        "anyView().view(NameMatchViewList.self)")
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.find(NameMatchView.self).pathToRoot,
                        "anyView().view(NameMatchViewList.self).forEach().view(NameMatchView.self, 0)")
         #else
@@ -274,7 +274,7 @@ final class CustomViewTests: XCTestCase {
         let sut = try AnyView(GenericContainer<String>()).inspect()
         XCTAssertEqual(try sut.find(GenericContainer<String>.self).pathToRoot,
                        "anyView().view(GenericContainer<EmptyView>.self)")
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.find(GenericContainer<String>.TestView.self).pathToRoot,
             "anyView().view(GenericContainer<EmptyView>.self).view(TestView.self)")
         #else

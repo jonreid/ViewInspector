@@ -16,7 +16,7 @@ final class CustomStyleModifiersTests: XCTestCase {
 
     func testHelloWorldStyleInspection() throws {
         let sut = EmptyView().helloWorldStyle(RedOutlineHelloWorldStyle())
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertTrue(try sut.inspect().customStyle("helloWorldStyle") is RedOutlineHelloWorldStyle)
         #else
         XCTAssertTrue(try sut.inspect().implicitAnyView().emptyView().customStyle("helloWorldStyle") is RedOutlineHelloWorldStyle)

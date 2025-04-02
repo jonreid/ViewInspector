@@ -98,7 +98,7 @@ final class PreferenceTests: XCTestCase {
     
     func testOverlaySearch() throws {
         let sut1 = try ManyOverlaysView().inspect()
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut1.find(text: "Test").pathToRoot,
             "view(ManyOverlaysView.self).emptyView().overlay().anyView().text()")
         XCTAssertEqual(try sut1.find(text: Key.defaultValue).pathToRoot,

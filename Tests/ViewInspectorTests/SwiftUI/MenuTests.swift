@@ -90,7 +90,7 @@ final class MenuTests: XCTestCase {
         let sut = TestMenuStyle()
         let menu = try sut.inspect().implicitAnyView().vStack().menu(0)
         XCTAssertEqual(try menu.blur().radius, 3)
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(try sut.inspect().find(ViewType.StyleConfiguration.Content.self).pathToRoot,
                        "vStack().menu(0).styleConfigurationContent(0)")
         #else

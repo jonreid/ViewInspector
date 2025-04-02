@@ -67,7 +67,7 @@ final class ModifiedContentTests: XCTestCase {
         let sut = try view.inspect().emptyView().modifier(TestModifier.self)
         let content = try sut.implicitAnyView().viewModifierContent()
         XCTAssertNoThrow(try content.callOnAppear())
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(content.pathToRoot,
                        "emptyView().modifier(TestModifier.self).viewModifierContent()")
         #else
@@ -87,7 +87,7 @@ final class ModifiedContentTests: XCTestCase {
         let sut1 = try view.inspect().emptyView().modifier(TestModifier.self)
         XCTAssertEqual(try sut1.actualView().tag, 1)
         let content1 = try sut1.implicitAnyView().viewModifierContent()
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(content1.pathToRoot,
             "emptyView().modifier(TestModifier.self).viewModifierContent()")
         #else
@@ -96,7 +96,7 @@ final class ModifiedContentTests: XCTestCase {
         #endif
         let sut2 = try view.inspect().emptyView().modifier(TestModifier2.self)
         let content2 = try sut2.find(ViewType.ViewModifierContent.self)
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(content2.pathToRoot,
             "emptyView().modifier(TestModifier2.self).hStack().viewModifierContent(1)")
         #else
@@ -106,7 +106,7 @@ final class ModifiedContentTests: XCTestCase {
         let sut3 = try view.inspect().emptyView().modifier(TestModifier.self, 1)
         XCTAssertEqual(try sut3.actualView().tag, 2)
         let content3 = try sut3.implicitAnyView().viewModifierContent()
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(content3.pathToRoot,
             "emptyView().modifier(TestModifier.self, 1).viewModifierContent()")
         #else
@@ -161,7 +161,7 @@ final class ModifiedContentTests: XCTestCase {
         let sut2 = EmptyView().modifier(TestModifier3()).environmentObject(ExternalState())
         let content = try sut2.inspect().emptyView().modifier(TestModifier3.self).implicitAnyView().group().viewModifierContent(0)
         let text = try sut2.inspect().emptyView().modifier(TestModifier3.self).implicitAnyView().group().text(1)
-        #if compiler(<6)
+        #if compiler(<6) || compiler(>=6.1)
         XCTAssertEqual(content.pathToRoot,
             "emptyView().modifier(TestModifier3.self).group().viewModifierContent(0)")
         XCTAssertEqual(text.pathToRoot,
