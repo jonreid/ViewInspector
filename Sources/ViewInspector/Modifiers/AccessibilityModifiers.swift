@@ -38,7 +38,18 @@ public extension InspectableView {
     func accessibilityValue() throws -> InspectableView<ViewType.Text> {
         let text: Text
         let call = "accessibilityValue"
-        if #available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *) {
+        if #available(iOS 18.4, macOS 15.4, tvOS 18.4, watchOS 11.4, *) {
+            if let firstText = try v3AccessibilityElement(
+                path: "some|description|text", type: [Text].self,
+                call: call, { $0.accessibilityValue("") }).first {
+                text = firstText
+            } else {
+                throw InspectionError
+                    .modifierNotFound(parent: Inspector.typeName(value: content.view),
+                                      modifier: call,
+                                      index: 0)
+            }
+        } else if #available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *) {
             if let firstText = try? v3AccessibilityElement(
                 path: "some|description", type: [Text].self,
                 call: call, { $0.accessibilityValue("") }).first {
