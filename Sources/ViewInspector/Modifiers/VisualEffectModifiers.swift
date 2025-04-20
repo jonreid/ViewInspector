@@ -130,6 +130,14 @@ public extension InspectableView {
     }
 }
 
+@available(iOS 16.0, macOS 13.0, tvOS 16.0, *)
+public extension InspectableView {
+    func cornerRadii() throws -> RectangleCornerRadii {
+        let shape = try clipShape(UnevenRoundedRectangle.self)
+        return shape.cornerRadii
+    }
+}
+
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
 internal extension Content {
     func mask(parent: UnwrappedView, index: Int?) throws -> InspectableView<ViewType.ClassifiedView> {
