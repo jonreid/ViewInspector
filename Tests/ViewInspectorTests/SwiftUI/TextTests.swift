@@ -45,6 +45,19 @@ final class TextTests: XCTestCase {
         XCTAssertEqual(value, "Test")
     }
     
+    func testLocalizedStringResourceStringWithLocaleNoParams() throws {
+        let bundle = try Bundle.testResources()
+        let resource = LocalizedStringResource("Test", table: "Test", bundle: .atURL(bundle.bundleURL))
+        let sut = Text(resource)
+        let text = try sut.inspect().text()
+        let value1 = try text.string(locale: Locale(identifier: "en"))
+        XCTAssertEqual(value1, "Test_en")
+        let value2 = try text.string(locale: Locale(identifier: "en_AU"))
+        XCTAssertEqual(value2, "Test_en_au")
+        let value3 = try text.string(locale: Locale(identifier: "ru"))
+        XCTAssertEqual(value3, "Тест_ru")
+    }
+    
     func testResourceLocalizationStringNoParams() throws {
         let bundle = try Bundle.testResources()
         let sut = Text("Test", tableName: "Test", bundle: bundle)

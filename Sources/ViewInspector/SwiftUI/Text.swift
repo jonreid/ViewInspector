@@ -136,7 +136,7 @@ private extension ViewType.Text {
             guard #available(macOS 13, iOS 16, tvOS 16, watchOS 9, *) else {
                 throw InspectionError.notSupported("LocalizedStringResource is not supported in this OS version")
             }
-            return try extractString(localizedStringResourceStorage: textStorage)
+            return try extractString(localizedStringResourceStorage: textStorage, locale)
         default:
             throw InspectionError.notSupported("Unknown text storage: \(storageType)")
         }
@@ -202,9 +202,10 @@ private extension ViewType.Text {
     // MARK: - LocalizedStringResourceStorage
     
     @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
-    private static func extractString(localizedStringResourceStorage: Any) throws -> String {
-        let resource = try Inspector
+    private static func extractString(localizedStringResourceStorage: Any, _ locale: Locale) throws -> String {
+        var resource = try Inspector
             .attribute(label: "resource", value: localizedStringResourceStorage, type: LocalizedStringResource.self)
+        resource.locale = locale
         return String(localized: resource)
     }
     
