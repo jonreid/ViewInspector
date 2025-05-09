@@ -38,6 +38,13 @@ final class TextTests: XCTestCase {
         XCTAssertEqual(value, "Test")
     }
     
+    func testLocalizedStringResourceStringNoParams() throws {
+        let resource = LocalizedStringResource("Test")
+        let sut = Text(resource)
+        let value = try sut.inspect().text().string()
+        XCTAssertEqual(value, "Test")
+    }
+    
     func testResourceLocalizationStringNoParams() throws {
         let bundle = try Bundle.testResources()
         let sut = Text("Test", tableName: "Test", bundle: bundle)
