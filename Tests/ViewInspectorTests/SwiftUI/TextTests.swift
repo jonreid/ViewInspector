@@ -38,6 +38,7 @@ final class TextTests: XCTestCase {
         XCTAssertEqual(value, "Test")
     }
     
+    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
     func testLocalizedStringResourceStringNoParams() throws {
         let resource = LocalizedStringResource("Test")
         let sut = Text(resource)
@@ -45,6 +46,7 @@ final class TextTests: XCTestCase {
         XCTAssertEqual(value, "Test")
     }
     
+    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
     func testLocalizedStringResourceStringWithLocaleNoParams() throws {
         let bundle = try Bundle.testResources()
         let resource = LocalizedStringResource("Test", table: "Test", bundle: .atURL(bundle.bundleURL))
@@ -58,6 +60,7 @@ final class TextTests: XCTestCase {
         XCTAssertEqual(value3, "Тест_ru")
     }
     
+    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
     func testLocalizedStringResourceWithOneParam() throws {
         let resource = LocalizedStringResource("Test \(12)")
         let sut = Text(resource)
@@ -65,6 +68,7 @@ final class TextTests: XCTestCase {
         XCTAssertEqual(value, "Test 12")
     }
     
+    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
     func testLocalizedStringResourceWithMultipleParams() throws {
         let resource = LocalizedStringResource("Test \(12) \(5.7, specifier: "%.1f") \("abc")")
         let sut = Text(resource)
