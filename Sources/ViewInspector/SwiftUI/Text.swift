@@ -132,6 +132,11 @@ private extension ViewType.Text {
                 throw InspectionError.notSupported("AttributedString is not supported in this OS version")
             }
             return String(try view.attributedString().characters)
+        case "LocalizedStringResourceStorage":
+            guard #available(macOS 13, iOS 16, tvOS 16, watchOS 9, *) else {
+                throw InspectionError.notSupported("LocalizedStringResource is not supported in this OS version")
+            }
+            return try extractString(localizedStringResourceStorage: textStorage)
         default:
             throw InspectionError.notSupported("Unknown text storage: \(storageType)")
         }
@@ -192,6 +197,15 @@ private extension ViewType.Text {
     
     private static func extractString(dateTextStorage: Any) throws -> String {
         throw InspectionError.notSupported("Inspection of formatted Date is currently not supported")
+    }
+    
+    // MARK: - LocalizedStringResourceStorage
+    
+    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
+    private static func extractString(localizedStringResourceStorage: Any) throws -> String {
+        let resource = try Inspector
+            .attribute(label: "resource", value: localizedStringResourceStorage, type: LocalizedStringResource.self)
+        return String(localized: resource)
     }
     
     // MARK: - LocalizedTextStorage
