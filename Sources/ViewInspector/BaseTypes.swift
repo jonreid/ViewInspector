@@ -15,7 +15,9 @@ public protocol Inspectable { }
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
 public protocol CustomInspectable {
     associatedtype View: SwiftUI.View
+    #if swift(>=6.0)
     @MainActor
+    #endif
     var customInspectableContent: View { get }
 }
 
