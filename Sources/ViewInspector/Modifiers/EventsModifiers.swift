@@ -53,7 +53,7 @@ public extension InspectableView {
 public extension InspectableView {
 
     func callRefreshable() async throws {
-        if #available(iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0, *) {
+        if #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) {
             let callback = try modifierAttribute(
                 modifierName: "RefreshableModifier", path: "modifier|action",
                 type: (@Sendable () async -> Void).self, call: "refreshable")

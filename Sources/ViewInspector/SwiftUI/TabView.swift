@@ -116,6 +116,9 @@ internal extension Content {
     }
 }
 
+#if swift(>=6.0)
+@MainActor
+#endif
 @available(iOS 14.0, tvOS 14.0, watchOS 7.0, *)
 @available(macOS, unavailable)
 extension PageTabViewStyle: @preconcurrency Equatable {

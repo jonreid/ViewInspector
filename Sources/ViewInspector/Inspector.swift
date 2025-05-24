@@ -179,10 +179,27 @@ internal extension Inspector {
 
     static func cast<T>(value: Any, type: T.Type) throws -> T {
         guard let casted = value as? T else {
+            #if swift(>=6.0)
+            if let casted = castSendable(value: value, type: type) {
+                return casted
+            }
+            #endif
             throw InspectionError.typeMismatch(value, T.self)
         }
         return casted
     }
+
+    // This method exists because Swift 6 refuses the cast Any to Sendable
+    #if swift(>=6.0)
+    private static func castSendable<T>(value: Any, type: T.Type) -> T? {
+        typealias VoidClosure = @MainActor @Sendable () -> Void
+        if type == VoidClosure.self {
+            return try? unsafeMemoryRebind(value: value, type: type)
+        }
+        // Add more cases as needed
+        return nil
+    }
+    #endif
 
     static func unsafeMemoryRebind<V, T>(value: V, type: T.Type) throws -> T {
         guard MemoryLayout<V>.size == MemoryLayout<T>.size else {
