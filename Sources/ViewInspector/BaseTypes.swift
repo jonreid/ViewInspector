@@ -212,7 +212,10 @@ internal extension Content {
                          environmentModifiers: environmentModifiers,
                          environmentObjects: environmentObjects)
         }
-        
+
+        #if swift(>=6.0)
+        @MainActor
+        #endif
         func removingCustomViewModifiers() -> Medium {
             let modifiers = viewModifiers
                 .filter {
