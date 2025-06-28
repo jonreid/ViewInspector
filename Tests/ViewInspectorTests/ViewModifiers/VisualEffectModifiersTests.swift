@@ -219,13 +219,13 @@ final class ViewMaskingTests: XCTestCase {
         XCTAssertEqual(sut, 5)
     }
     
-    @available(iOS 16.0, macOS 13.0, tvOS 16.0, *)
+    @available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *)
     func testCornerRadii() throws {
         let sut = EmptyView().clipShape(UnevenRoundedRectangle())
         XCTAssertNoThrow(try sut.inspect().emptyView())
     }
     
-    @available(iOS 16.0, macOS 13.0, tvOS 16.0, *)
+    @available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *)
     func testCornerRadiiInspection() throws {
         let cornerRadii: RectangleCornerRadii = .init(topLeading: 1, bottomLeading: 2, bottomTrailing: 3, topTrailing: 4)
         let sut = try EmptyView().clipShape(UnevenRoundedRectangle(cornerRadii: cornerRadii))
