@@ -340,11 +340,12 @@ internal extension ViewHosting {
     static func lookup<V>(_ view: V.Type) throws -> V.WKInterfaceObjectType
         where V: WKInterfaceObjectRepresentable {
             let name = Inspector.typeName(type: view)
-            guard let rootVC = rootInterfaceController,
-                  let viewCache = try? Inspector.attribute(path: """
-                  super|$__lazy_storage_$_hostingController|some|\
-                  host|renderer|renderer|some|viewCache|map
-                  """, value: rootVC, type: ArrayConvertible.self).allValues(),
+            guard let rootVC = rootInterfaceController else {
+                throw InspectionError.viewNotFound(parent: name)
+            }
+            let host = try? Inspector.attribute(path: "super|_hostingController|some|host|_base", value: rootVC)
+                ?? (try? Inspector.attribute(path: "super|$__lazy_storage_$_hostingController|some|host", value: rootVC))
+            guard let viewCache = try? Inspector.attribute(path: "some|renderer|renderer|some|viewCache|map", value: host, type: ArrayConvertible.self).allValues(),
                   let object = viewCache.compactMap({ value in
                       try? Inspector.attribute(
                         path: "view|representedViewProvider",
