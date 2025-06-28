@@ -1,5 +1,9 @@
 import SwiftUI
+#if canImport(XCTest)
 import XCTest
+#else
+private func XCTFail(_ message: String = "", file: StaticString = #filePath, line: UInt = #line) { }
+#endif
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
 #if swift(>=6.0)

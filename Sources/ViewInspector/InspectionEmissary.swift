@@ -1,6 +1,15 @@
 import SwiftUI
 import Combine
+#if canImport(XCTest)
 import XCTest
+#else
+public struct XCTestExpectation {
+    public let description: String
+    public func fulfill() { }
+}
+
+private func XCTFail(_ message: String = "", file: StaticString = #filePath, line: UInt = #line) { }
+#endif
 
 @MainActor
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
