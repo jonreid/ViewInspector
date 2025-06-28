@@ -326,8 +326,15 @@ internal extension Inspector {
         children.enumerated().forEach { child in
             let childName = child.element.label ?? "[\(child.offset)]"
             let childType = typeName(value: child.element.value)
-            dict[childName + ": " + childType] = attributesTree(
-                value: child.element.value, medium: medium, visited: visited)
+            let value: Any
+            if childType.contains("EnvironmentPropertyKey") {
+                // lookup causes infinite loop
+                value = "<skipped>"
+            } else {
+                value = attributesTree(
+                    value: child.element.value, medium: medium, visited: visited)
+            }
+            dict[childName + ": " + childType] = value
         }
         if let contentExtractor = try? ContentExtractor(source: value),
            let content = try? contentExtractor.extractContent(environmentObjects: medium.environmentObjects) {
