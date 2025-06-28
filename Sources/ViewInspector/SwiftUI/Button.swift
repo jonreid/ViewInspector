@@ -129,6 +129,12 @@ public extension PrimitiveButtonStyle {
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
 internal extension ButtonStyleConfiguration {
+    private struct Allocator2 {
+        let data: (Bool, Bool)
+        init(flag: Bool) {
+            data = (false, flag)
+        }
+    }
     private struct Allocator3 {
         let data: (Bool, Bool, Bool)
         init(flag: Bool) {
@@ -143,6 +149,8 @@ internal extension ButtonStyleConfiguration {
     }
     init(isPressed: Bool) {
         switch MemoryLayout<Self>.size {
+        case 2:
+            self = unsafeBitCast(Allocator2(flag: isPressed), to: Self.self)
         case 3:
             self = unsafeBitCast(Allocator3(flag: isPressed), to: Self.self)
         case 24:
@@ -169,6 +177,13 @@ public extension PrimitiveButtonStyleConfiguration {
                    Int64, Int64, Int64, Int64, Int32) =
             (0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     }
+    private struct Allocator106 {
+        let head: (Bool, Bool) = (false, false)
+        let onTrigger: () -> Void
+        let tail: (Int64, Int64, Int64, Int64, Int64,
+                   Int64, Int64, Int64, Int64, Int64, Int16) =
+            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    }
     private struct Allocator114 {
         let head: (Bool, Bool) = (false, false)
         let onTrigger: () -> Void
@@ -184,6 +199,8 @@ public extension PrimitiveButtonStyleConfiguration {
             self = unsafeBitCast(Allocator24(onTrigger: onTrigger), to: Self.self)
         case 100:
             self = unsafeBitCast(Allocator100(onTrigger: onTrigger), to: Self.self)
+        case 106:
+            self = unsafeBitCast(Allocator106(onTrigger: onTrigger), to: Self.self)
         case 114:
             self = unsafeBitCast(Allocator114(onTrigger: onTrigger), to: Self.self)
         default:
