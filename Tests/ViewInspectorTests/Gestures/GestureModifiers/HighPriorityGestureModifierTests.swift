@@ -102,4 +102,15 @@ final class HighPriorityGestureModifierTests: XCTestCase {
         let path = try sut.inspect().emptyView().highPriorityGesture(LongPressGesture.self, 1).pathToRoot
         XCTAssertEqual(path, "emptyView().highPriorityGesture(LongPressGesture.self, 1)")
     }
+    
+    func testHighPriorityGestureWithSimultaneousGestureContainingDragGestureAndMagnificationGesture() throws {
+        guard #available(iOS 17.0, macOS 14.0, *) else { throw XCTSkip() }
+        let sut = EmptyView()
+            .padding(100)
+            .highPriorityGesture(SimultaneousGesture(DragGesture(), MagnifyGesture()))
+        
+        XCTAssertNoThrow(
+            try sut.inspect().emptyView().highPriorityGesture(SimultaneousGesture<DragGesture, MagnifyGesture>.self)
+        )
+    }
 }
