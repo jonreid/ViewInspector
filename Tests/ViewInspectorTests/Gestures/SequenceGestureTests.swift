@@ -61,6 +61,18 @@ final class SequenceGestureTests: XCTestCase {
         XCTAssertEqual(sequenceGesture.first.minimumScaleDelta, 1.5)
         XCTAssertEqual(sequenceGesture.second.minimumAngleDelta, Angle(degrees: 5))
     }
+    
+    @available(iOS 17.0, macOS 14.0, *)
+    func testSequenceGestureWithMagnifyAndRotateGestures() throws {
+        let sut = EmptyView().gesture(SequenceGesture(
+            MagnifyGesture(minimumScaleDelta: 1.5),
+            RotationGesture(minimumAngleDelta: Angle(degrees: 5))))
+        let emptyView = try sut.inspect().emptyView()
+        let gesture = try emptyView.gesture(SequenceGesture<MagnifyGesture, RotationGesture>.self)
+        let sequenceGesture = try gesture.actualGesture()
+        XCTAssertEqual(sequenceGesture.first.minimumScaleDelta, 1.5)
+        XCTAssertEqual(sequenceGesture.second.minimumAngleDelta, Angle(degrees: 5))
+    }
 
     func testSequenceGestureWithUpdatingModifier() throws {
         try gestureTests!.propertiesWithUpdatingModifierTest()

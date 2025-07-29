@@ -61,6 +61,18 @@ final class ExclusiveGestureTests: XCTestCase {
         XCTAssertEqual(exclusiveGesture.second.minimumAngleDelta, Angle(degrees: 5))
     }
     
+    @available(iOS 17.0, macOS 14.0, *)
+    func testExclusiveGestureWithMagnifyAndRotateGestures() throws {
+        let sut = EmptyView().gesture(ExclusiveGesture(
+            MagnifyGesture(minimumScaleDelta: 1.5),
+            RotationGesture(minimumAngleDelta: Angle(degrees: 5))))
+        let emptyView = try sut.inspect().emptyView()
+        let gesture = try emptyView.gesture(ExclusiveGesture<MagnifyGesture, RotationGesture>.self)
+        let exclusiveGesture = try gesture.actualGesture()
+        XCTAssertEqual(exclusiveGesture.first.minimumScaleDelta, 1.5)
+        XCTAssertEqual(exclusiveGesture.second.minimumAngleDelta, Angle(degrees: 5))
+    }
+    
     func testExclusiveGestureWithUpdatingModifier() throws {
         try gestureTests!.propertiesWithUpdatingModifierTest()
     }
