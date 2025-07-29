@@ -72,6 +72,18 @@ final class SimultaneousGestureTests: XCTestCase {
         XCTAssertEqual(simultaneousGesture.second.minimumAngleDelta, Angle(degrees: 5))
     }
     
+    @available(iOS 17.0, macOS 14.0, *)
+    func testSimultaneousGestureWithMagnifyAndRotateGestures() throws {
+        let sut = EmptyView().gesture(SimultaneousGesture(
+            MagnifyGesture(minimumScaleDelta: 1.5),
+            RotationGesture(minimumAngleDelta: Angle(degrees: 5))))
+        let emptyView = try sut.inspect().emptyView()
+        let gesture = try emptyView.gesture(SimultaneousGesture<MagnifyGesture, RotationGesture>.self)
+        let simultaneousGesture = try gesture.actualGesture()
+        XCTAssertEqual(simultaneousGesture.first.minimumScaleDelta, 1.5)
+        XCTAssertEqual(simultaneousGesture.second.minimumAngleDelta, Angle(degrees: 5))
+    }
+    
     func testSimultaneousGestureWithUpdatingModifier() throws {
         try gestureTests!.propertiesWithUpdatingModifierTest()
     }
