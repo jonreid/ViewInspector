@@ -311,6 +311,7 @@ internal extension InspectableView {
             "GestureStateGesture": .state,
             "LongPressGesture": .simple,
             "MagnificationGesture": .simple,
+            "MagnifyGesture": .simple,
             "RotationGesture": .simple,
             "SequenceGesture": .composed,
             "SimultaneousGesture": .composed,
@@ -446,4 +447,31 @@ public extension SpatialTapGesture.Value {
             to: SpatialTapGesture.Value.self
         )
    }
+}
+
+@available(iOS 17.0, macOS 14.0, *)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+public extension MagnifyGesture.Value {
+
+    private struct Allocator {
+        var time: Date
+        var magnification: CGFloat
+        var velocity: CGFloat
+        var startAnchor: UnitPoint
+        var startLocation: CGPoint
+    }
+
+    init(time: Date, magnification: CGFloat, velocity: CGFloat, startAnchor: UnitPoint, startLocation: CGPoint) {
+        self = unsafeBitCast(
+            Allocator(
+                time: time,
+                magnification: magnification,
+                velocity: velocity,
+                startAnchor: startAnchor,
+                startLocation: startLocation
+            ),
+            to: MagnifyGesture.Value.self
+        )
+    }
 }

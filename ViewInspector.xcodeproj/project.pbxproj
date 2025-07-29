@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		0A77CAAA2E38D506005AA6AA /* MagnifyGestureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A77CAA92E38D503005AA6AA /* MagnifyGestureTests.swift */; };
 		1F5B24C02C73962300F884E7 /* ContentUnavailableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B24BF2C73962300F884E7 /* ContentUnavailableView.swift */; };
 		1F5B24C32C73A06800F884E7 /* ContentUnavailableViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B24C12C73A01F00F884E7 /* ContentUnavailableViewTests.swift */; };
 		1FA29F102AF0503000CCE6FA /* NavigationDestinationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA29F0F2AF0503000CCE6FA /* NavigationDestinationTests.swift */; };
@@ -315,6 +316,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A77CAA92E38D503005AA6AA /* MagnifyGestureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagnifyGestureTests.swift; sourceTree = "<group>"; };
 		1F5B24BF2C73962300F884E7 /* ContentUnavailableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentUnavailableView.swift; sourceTree = "<group>"; };
 		1F5B24C12C73A01F00F884E7 /* ContentUnavailableViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentUnavailableViewTests.swift; sourceTree = "<group>"; };
 		1FA29F0F2AF0503000CCE6FA /* NavigationDestinationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDestinationTests.swift; sourceTree = "<group>"; };
@@ -641,6 +643,7 @@
 				CDA844AB262B771F00C56C98 /* DragGestureTests.swift */,
 				CDA844B5262B7E6900C56C98 /* LongPressGestureTests.swift */,
 				CDA844BB262B7EA800C56C98 /* MagnificationGestureTests.swift */,
+				0A77CAA92E38D503005AA6AA /* MagnifyGestureTests.swift */,
 				CDA844C1262B7EEE00C56C98 /* RotationGestureTests.swift */,
 				1FFB701C2B0C21DC004975B3 /* SpatialTapGestureTests.swift */,
 				CDA844C7262B7F3100C56C98 /* TapGestureTests.swift */,
@@ -1293,6 +1296,7 @@
 				CDA8451C262CC34D00C56C98 /* CommonComposedGestureChangedTests.swift in Sources */,
 				525076282650000600ADE4E7 /* AlertTests.swift in Sources */,
 				F60EEBF92382F004007DB53A /* InspectorTests.swift in Sources */,
+				0A77CAAA2E38D506005AA6AA /* MagnifyGestureTests.swift in Sources */,
 				F6D933A52385DC0F00358E0E /* TabViewTests.swift in Sources */,
 				F6D933A12385B48100358E0E /* NavigationLinkTests.swift in Sources */,
 				F6C15A7B254B7555000240F1 /* OutlineGroupTests.swift in Sources */,
