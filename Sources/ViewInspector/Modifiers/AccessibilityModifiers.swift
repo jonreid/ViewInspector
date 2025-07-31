@@ -106,7 +106,13 @@ public extension InspectableView {
     
     func accessibilityIdentifier() throws -> String {
         let call = "accessibilityIdentifier"
-        if #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *) {
+        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
+            return try modifierAttribute(
+                modifierName: "AccessibilityAttachmentModifier",
+                path: "modifier|storage|value|properties|identifier|some|rawValue",
+                type: String.self,
+                call: call)
+        } else if #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *) {
             return try v3AccessibilityElement(
                 path: "some|rawValue", type: String.self,
                 call: call, { $0.accessibilityIdentifier("") })
