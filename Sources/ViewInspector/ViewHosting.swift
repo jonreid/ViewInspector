@@ -35,7 +35,7 @@ public extension ViewHosting {
                         function: String = #function,
                         whileHosted: @MainActor () async throws -> Void
     ) async throws where V: View {
-        try await host(view, function: function, whileHosted: { _ in
+        try await host(view, size: size, function: function, whileHosted: { _ in
             try await whileHosted()
         })
     }
