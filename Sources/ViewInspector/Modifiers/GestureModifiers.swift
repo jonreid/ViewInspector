@@ -5,12 +5,11 @@ import SwiftUI
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
 public extension InspectableView {
     func callOnTapGesture() throws {
-        if #available(iOS 26, *) {
-            typealias Closure = () -> ()
-            let callback = try modifierAttribute(
-                modifierName: "TapGestureModifier",
-                path: "modifier|action",
-                type: Closure.self, call: "onTapGesture")
+        typealias Callback = () -> Void
+        if let callback = try? modifierAttribute(
+            modifierName: "TapGestureModifier",
+            path: "modifier|action",
+            type: Callback.self, call: "onTapGesture") {
             callback()
         } else {
             typealias Callback = ((()) -> Void)
