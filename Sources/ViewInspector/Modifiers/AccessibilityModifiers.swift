@@ -15,7 +15,9 @@ public extension InspectableView {
         }
         let text: Text
         let call = "accessibilityLabel"
-        if #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *) {
+        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
+            text = try v4AccessibilityPropertyFirst(path: "label|some|texts", call: call)
+        } else if #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *) {
             if let firstText = try? v3AccessibilityElement(
                 path: "some|texts", type: [Text].self,
                 call: call, { $0.accessibilityLabel("") }).first {
@@ -38,7 +40,9 @@ public extension InspectableView {
     func accessibilityValue() throws -> InspectableView<ViewType.Text> {
         let text: Text
         let call = "accessibilityValue"
-        if #available(iOS 18.4, macOS 15.4, tvOS 18.4, watchOS 11.4, *) {
+        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
+            text = try v4AccessibilityPropertyFirst(path: "value|some|description|text", call: call)
+        } else if #available(iOS 18.4, macOS 15.4, tvOS 18.4, watchOS 11.4, *) {
             if let firstText = try v3AccessibilityElement(
                 path: "some|description|text", type: [Text].self,
                 call: call, { $0.accessibilityValue("") }).first {
@@ -107,11 +111,7 @@ public extension InspectableView {
     func accessibilityIdentifier() throws -> String {
         let call = "accessibilityIdentifier"
         if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
-            return try modifierAttribute(
-                modifierName: "AccessibilityAttachmentModifier",
-                path: "modifier|storage|value|properties|identifier|some|rawValue",
-                type: String.self,
-                call: call)
+            return try v4AccessibilityProperty(path: "identifier|some|rawValue", call: call)
         } else if #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *) {
             return try v3AccessibilityElement(
                 path: "some|rawValue", type: String.self,
@@ -371,6 +371,23 @@ extension InspectableView {
                 type: [Any].self, call: call)
                 .map { try AccessibilityProperty(property: $0) }
         }
+    }
+
+    func v4AccessibilityProperty<T>(path: String, type: T.Type = T.self, call: String) throws -> T {
+        return try modifierAttribute(
+            modifierName: "AccessibilityAttachmentModifier",
+            path: "modifier|storage|value|properties|\(path)",
+            type: T.self,
+            call: call)
+    }
+
+    func v4AccessibilityPropertyFirst<T>(path: String, type: T.Type = T.self, call: String) throws -> T {
+        let values = try v4AccessibilityProperty(path: path, type: [T].self, call: call)
+        if let first = values.first { return first }
+        throw InspectionError
+            .modifierNotFound(parent: Inspector.typeName(value: content.view),
+                              modifier: call,
+                              index: 0)
     }
 }
 
