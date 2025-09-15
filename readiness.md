@@ -124,7 +124,7 @@ This document reflects the current status of the [ViewInspector](https://github.
 |:white_check_mark:| TabView | `contained view` |
 |:technologist:| Table | |
 |:white_check_mark:| Text | `string(locale: Locale) -> String`, `attributes: TextAttributes`, `attributedString: AttributedString`, `images: [Image]` |
-|:white_check_mark:| TextEditor | `input: String`, `setInput(_: String)` |
+|:white_check_mark:| TextEditor | `input: String`, `setInput(_: String)`, `attributedInput: AttributedString`, `setInput(_: AttributedString)`, `selection: TextSelection?`, `setSelection(_: TextSelection?)`, `attributedSelection: AttributedTextSelection?`, `setSelection(_: AttributedTextSelection)` |
 |:white_check_mark:| TextField | `label view`, `prompt`, `callOnEditingChanged()`, `callOnCommit()`, `input: String`, `setInput(_: String)` |
 |:technologist:| TextFieldLink | |
 |:white_check_mark:| TimelineView | `contentView(Context)` |
