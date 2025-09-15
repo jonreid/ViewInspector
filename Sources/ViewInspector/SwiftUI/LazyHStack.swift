@@ -60,6 +60,9 @@ public extension InspectableView where View == ViewType.LazyHStack {
     }
     
     private func lazyHStackLayout() throws -> Any {
+        if let layout = try? Inspector.attribute(path: "tree|content|root", value: content.view) {
+            return layout
+        }
         return try Inspector.attribute(path: "tree|root", value: content.view)
     }
 }

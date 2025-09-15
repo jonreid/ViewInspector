@@ -44,6 +44,11 @@ public extension InspectableView {
     
     func gesture<T>(_ type: T.Type, _ index: Int? = nil) throws -> InspectableView<ViewType.Gesture<T>>
         where T: Gesture {
+        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
+            return try gestureModifier(
+                modifierName: "AddGestureModifier", combinerName: "DefaultGestureCombiner", path: "modifier",
+                type: type, call: "gesture", index: index)
+        }
         return try gestureModifier(
             modifierName: "AddGestureModifier", path: "modifier",
             type: type, call: "gesture", index: index)
@@ -51,6 +56,11 @@ public extension InspectableView {
     
     func highPriorityGesture<T>(_ type: T.Type, _ index: Int? = nil) throws -> InspectableView<ViewType.Gesture<T>>
         where T: Gesture {
+        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
+            return try gestureModifier(
+                modifierName: "AddGestureModifier", combinerName: "HighPriorityGestureCombiner", path: "modifier",
+                type: type, call: "highPriorityGesture", index: index)
+        }
         return try gestureModifier(
             modifierName: "HighPriorityGestureModifier", path: "modifier",
             type: type, call: "highPriorityGesture", index: index)
@@ -58,6 +68,11 @@ public extension InspectableView {
     
     func simultaneousGesture<T>(_ type: T.Type, _ index: Int? = nil) throws -> InspectableView<ViewType.Gesture<T>>
         where T: Gesture {
+        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
+            return try gestureModifier(
+                modifierName: "AddGestureModifier", combinerName: "SimultaneousGestureCombiner", path: "modifier",
+                type: type, call: "simultaneousGesture", index: index)
+        }
         return try gestureModifier(
             modifierName: "SimultaneousGestureModifier", path: "modifier",
             type: type, call: "simultaneousGesture", index: index)
@@ -169,6 +184,35 @@ internal extension InspectableView {
         let rootView = try modifierAttribute(modifierName: modifierName, path: path, type: Any.self,
                                              call: modifierCall, index: index ?? 0)
         
+        let (name, _) = gestureInfo(typeName, Inspector.typeName(value: rootView))
+        guard name == typeName else {
+            throw InspectionError.typeMismatch(factual: name, expected: typeName)
+        }
+
+        return try InspectableView<ViewType.Gesture<T>>.init(
+            Content(rootView), parent: self,
+            call: ViewType.Gesture<T>.inspectionCall(call: call, typeName: typeName, index: index))
+    }
+
+    func gestureModifier<T>(
+        modifierName: String,
+        combinerName: String,
+        path: String,
+        type: T.Type,
+        call: String,
+        index: Int? = nil) throws -> InspectableView<ViewType.Gesture<T>>
+        where T: Gesture {
+        let typeName = Inspector.typeName(type: type)
+        let modifierCall = ViewType.Gesture<T>.inspectionCall(call: call, typeName: typeName, index: nil)
+
+        let rootView = try contentForModifierLookup.modifierAttribute(
+            modifierLookup: { modifier -> Bool in
+                guard modifier.modifierType.contains(modifierName),
+                      modifier.modifierType.contains(combinerName) else { return false }
+                return (try? Inspector.attribute(path: path, value: modifier)) != nil
+            },
+            path: path, type: Any.self, call: modifierCall, index: index ?? 0)
+
         let (name, _) = gestureInfo(typeName, Inspector.typeName(value: rootView))
         guard name == typeName else {
             throw InspectionError.typeMismatch(factual: name, expected: typeName)

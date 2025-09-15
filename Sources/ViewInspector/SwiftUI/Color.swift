@@ -44,6 +44,10 @@ public extension InspectableView where View == ViewType.Color {
             colorProvider = try Inspector.attribute(label: "color", value: colorProvider)
             providerName = Inspector.typeName(value: colorProvider)
         }
+        if providerName == "ResolvedHDR" {
+            colorProvider = try Inspector.attribute(label: "base", value: colorProvider)
+            providerName = Inspector.typeName(value: colorProvider)
+        }
         if ["_Resolved", "Resolved"].contains(providerName) {
             let red = try Inspector.attribute(label: "linearRed", value: colorProvider, type: Float.self)
             let green = try Inspector.attribute(label: "linearGreen", value: colorProvider, type: Float.self)
