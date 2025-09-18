@@ -80,6 +80,6 @@ final class LazyVGridTests: XCTestCase {
         else { throw XCTSkip() }
         let view = LazyVGrid(columns: [GridItem(.fixed(10))]) { Text("") }
         let sut = try view.inspect().lazyVGrid().columns()
-        XCTAssertEqual(sut, [GridItem(.fixed(10))])
+        XCTAssertTrue(sut.isEqual([GridItem(.fixed(10))]))
     }
 }

@@ -72,17 +72,27 @@ public extension InspectableView where View == ViewType.LazyHGrid {
 }
 
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
-extension GridItem: Equatable {
-    public static func == (lhs: GridItem, rhs: GridItem) -> Bool {
-        return lhs.size == rhs.size
+extension Array where Element == GridItem {
+    public func isEqual(_ other: [GridItem]) -> Bool {
+        guard count == other.count else { return false }
+        return zip(self, other).allSatisfy { $0.isEqual($1) }
+    }
+}
+
+@available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
+extension GridItem {
+    public func isEqual(_ rhs: GridItem) -> Bool {
+        let lhs = self
+        return lhs.size.isEqual(rhs.size)
             && lhs.spacing == rhs.spacing
             && lhs.alignment == rhs.alignment
     }
 }
 
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
-extension GridItem.Size: Equatable {
-    public static func == (lhs: GridItem.Size, rhs: GridItem.Size) -> Bool {
+private extension GridItem.Size {
+    func isEqual(_ rhs: GridItem.Size) -> Bool {
+        let lhs = self
         switch (lhs, rhs) {
         case let (.fixed(lhsValue), .fixed(rhsValue)):
             return lhsValue == rhsValue
