@@ -498,7 +498,7 @@ public extension SpatialTapGesture.Value {
 @available(tvOS, unavailable)
 public extension MagnifyGesture.Value {
 
-    private struct Allocator {
+    private struct Allocator56 {
         var time: Date
         var magnification: CGFloat
         var velocity: CGFloat
@@ -506,16 +506,35 @@ public extension MagnifyGesture.Value {
         var startLocation: CGPoint
     }
 
+    private struct Allocator72 {
+        var time: Date
+        var magnification: CGFloat
+        var velocity: CGFloat
+        var startAnchor: UnitPoint
+        var startLocation: CGPoint
+        var tail: (Int64, Int64) = (0, 0)
+    }
+
     init(time: Date, magnification: CGFloat, velocity: CGFloat, startAnchor: UnitPoint, startLocation: CGPoint) {
-        self = unsafeBitCast(
-            Allocator(
+        switch MemoryLayout<Self>.size {
+        case 56:
+            self = unsafeBitCast(Allocator56(
                 time: time,
                 magnification: magnification,
                 velocity: velocity,
                 startAnchor: startAnchor,
                 startLocation: startLocation
-            ),
-            to: MagnifyGesture.Value.self
-        )
+            ), to: Self.self)
+        case 72:
+            self = unsafeBitCast(Allocator72(
+                time: time,
+                magnification: magnification,
+                velocity: velocity,
+                startAnchor: startAnchor,
+                startLocation: startLocation
+            ), to: Self.self)
+        default:
+            fatalError(MemoryLayout<Self>.actualSize())
+        }
     }
 }
