@@ -91,7 +91,10 @@ public extension InspectableView {
     
     func accessibilityHidden() throws -> Bool {
         let call = "accessibilityHidden"
-        if #available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *) {
+        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
+            let value = try v4AccessibilityProperty(path: "visibility|some|value|rawValue", type: UInt32.self, call: call)
+            return value != 0
+        } else if #available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *) {
             let value = try v3AccessibilityElement(
                 path: "value|rawValue", type: UInt32.self,
                 call: call, { $0.accessibilityHidden(true) })
