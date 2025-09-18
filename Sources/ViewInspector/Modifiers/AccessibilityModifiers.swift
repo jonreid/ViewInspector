@@ -74,7 +74,12 @@ public extension InspectableView {
     func accessibilityHint() throws -> InspectableView<ViewType.Text> {
         let text: Text
         let call = "accessibilityHint"
-        if #available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *) {
+        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *),
+           let firstText = try v4AccessibilityProperty(
+            path: "typedValue", type: [Text].self,
+            call: call, { $0.accessibilityHint("") }).first {
+            text = firstText
+        } else if #available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *) {
             if let firstText = try? v3AccessibilityElement(
                 type: [Text].self, call: call, { $0.accessibilityHint("") }).first {
                 text = firstText
@@ -129,7 +134,10 @@ public extension InspectableView {
     
     func accessibilitySortPriority() throws -> Double {
         let call = "accessibilitySortPriority"
-        if #available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *) {
+        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
+            return try v4AccessibilityProperty(
+                path: "typedValue|some", type: Double.self, call: call, { $0.accessibilitySortPriority(0) })
+        } else if #available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *) {
             return try v3AccessibilityElement(
                 type: Double.self, call: call, { $0.accessibilitySortPriority(0) })
         } else {
@@ -148,18 +156,23 @@ public extension InspectableView {
     }
     
     func accessibilityActivationPoint() throws -> UnitPoint {
-        if #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *) {
+        let call = "accessibility(activationPoint:)"
+        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
+            return try v4AccessibilityProperty(
+                path: "typedValue|some|activate|some|unitPoint", type: UnitPoint.self,
+                call: call, { $0.accessibilityActivationPoint(.center) })
+        } else if #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *) {
             return try v3AccessibilityElement(
                 path: "some|activate|some|unitPoint", type: UnitPoint.self,
-                call: "accessibilityIdentifier", { $0.accessibilityActivationPoint(.center) })
+                call: call, { $0.accessibilityActivationPoint(.center) })
         } else if #available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *) {
             return try v3AccessibilityElement(
                 path: "some|unitPoint", type: UnitPoint.self,
-                call: "accessibilityIdentifier", { $0.accessibilityActivationPoint(.center) })
+                call: call, { $0.accessibilityActivationPoint(.center) })
         } else {
             return try v2AccessibilityElement(
             "ActivationPointKey", path: "value|some|unitPoint",
-            type: UnitPoint.self, call: "accessibility(activationPoint:)")
+            type: UnitPoint.self, call: call)
         }
     }
     
@@ -374,6 +387,25 @@ extension InspectableView {
                 type: [Any].self, call: call)
                 .map { try AccessibilityProperty(property: $0) }
         }
+    }
+
+    func v4AccessibilityProperty<V, T>(
+        path: String, type: T.Type, call: String, _ reference: (EmptyView) -> V
+    ) throws -> T where V: SwiftUI.View {
+        guard let objectId = try? reference(EmptyView()).inspect()
+                .v4CustomPropertyStorage(call: call)
+                .first?.key,
+              let property = try v4CustomPropertyStorage(call: call)[objectId]
+        else {
+            throw InspectionError
+                .modifierNotFound(parent: Inspector.typeName(value: content.view),
+                                  modifier: call, index: 0)
+        }
+        return try Inspector.attribute(path: path, value: property, type: T.self)
+    }
+
+    private func v4CustomPropertyStorage(call: String) throws -> [ObjectIdentifier: Any] {
+        return try v4AccessibilityProperty(path: "storage|storage", type: [ObjectIdentifier: Any].self, call: call)
     }
 
     func v4AccessibilityProperty<T>(path: String, type: T.Type = T.self, call: String) throws -> T {
