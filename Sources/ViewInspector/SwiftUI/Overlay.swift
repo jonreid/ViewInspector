@@ -27,7 +27,7 @@ public extension InspectableView {
     @available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *)
     func accessibilityActions(_ index: Int? = nil) throws -> InspectableView<ViewType.Overlay> {
         return try contentForModifierLookup
-            .overlay(parent: self, api: [.background, .backgroundStyle],
+            .overlay(parent: self, api: [.background, .backgroundStyle, .accessibilityActions],
                      apiName: "accessibilityActions", index: index)
     }
 }
@@ -112,6 +112,7 @@ internal extension ViewType.Overlay {
         case backgroundStyle
         case backgroundPreferenceV1
         case backgroundPreferenceV2
+        case accessibilityActions
 
         var call: String {
             switch self {
@@ -124,6 +125,8 @@ internal extension ViewType.Overlay {
                 return "overlayPreferenceValue"
             case .backgroundPreferenceV2, .backgroundPreferenceV1:
                 return "backgroundPreferenceValue"
+            case .accessibilityActions:
+                return "accessibilityActions"
             }
         }
     }
@@ -146,6 +149,8 @@ internal extension ViewType.Overlay.API {
             return "_OverlayPreferenceModifier"
         case .backgroundPreferenceV2:
             return "_BackgroundPreferenceModifier"
+        case .accessibilityActions:
+            return "AccessibilityProxyTransformModifier";
         }
     }
     
@@ -159,6 +164,8 @@ internal extension ViewType.Overlay.API {
             return "modifier|background"
         case .overlayStyle, .backgroundStyle:
             return "modifier|style"
+        case .accessibilityActions:
+            return "modifier|representation"
         }
     }
 
@@ -182,7 +189,7 @@ internal extension ViewType.Overlay.API {
             throw InspectionError.notSupported("Different view signature")
         }
         switch self {
-        case .overlayStyle, .backgroundStyle:
+        case .overlayStyle, .backgroundStyle, .accessibilityActions:
             break
         case .border:
             let stroke = try? InspectableView<ViewType.Shape>(Content(content), parent: nil, index: nil).strokeStyle()
