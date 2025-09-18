@@ -47,7 +47,7 @@ public extension InspectableView where View == ViewType.TextEditor {
     
     private func inputBinding() throws -> Binding<String> {
         #if compiler(>=6.2)
-        if #available(iOS 26, macOS 26, visionOS 26, *),
+        if #available(iOS 26, macOS 26, visionOS 26, watchOS 26, *),
            let binding = try? stringSelectionBindings().0 {
             return binding
         }
@@ -62,9 +62,8 @@ public extension InspectableView where View == ViewType.TextEditor {
 }
 
 #if compiler(>=6.2)
-@available(iOS 26, macOS 26, visionOS 26, *)
+@available(iOS 26, macOS 26, visionOS 26, watchOS 26, *)
 @available(tvOS, unavailable)
-@available(watchOS, unavailable)
 public extension InspectableView where View == ViewType.TextEditor {
 
     func attributedInput() throws -> AttributedString {

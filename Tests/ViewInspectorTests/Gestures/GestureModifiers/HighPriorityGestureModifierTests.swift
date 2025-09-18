@@ -5,10 +5,9 @@ import Combine
 
 // MARK: - High Priority Gesture Modifier Tests
 
-#if !os(tvOS)
+#if !os(watchOS) && !os(tvOS)
 @MainActor
 @available(iOS 13.0, macOS 10.15, *)
-@available(tvOS, unavailable)
 final class HighPriorityGestureModifierTests: XCTestCase {
 
     func testHighPriorityGesture() throws {

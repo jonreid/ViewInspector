@@ -345,10 +345,18 @@ internal extension ViewHosting {
             }
             let host = try? Inspector.attribute(path: "super|_hostingController|some|host|_base", value: rootVC)
                 ?? (try? Inspector.attribute(path: "super|$__lazy_storage_$_hostingController|some|host", value: rootVC))
-            guard let viewCache = try? Inspector.attribute(path: "some|renderer|renderer|some|viewCache|map", value: host, type: ArrayConvertible.self).allValues(),
+            let viewCacheMapPath: String, viewProviderPath: String
+            if #available(watchOS 26, *) {
+                viewCacheMapPath = "some|viewGraph|renderer|renderer|some|viewCache|map"
+                viewProviderPath = "container|super|coreRepresentedViewProvider"
+            } else {
+                viewCacheMapPath = "some|renderer|renderer|some|viewCache|map"
+                viewProviderPath = "view|representedViewProvider"
+            }
+            guard let viewCache = try? Inspector.attribute(path: viewCacheMapPath, value: host, type: ArrayConvertible.self).allValues(),
                   let object = viewCache.compactMap({ value in
                       try? Inspector.attribute(
-                        path: "view|representedViewProvider",
+                        path: viewProviderPath,
                         value: value, type: V.WKInterfaceObjectType.self)
                   }).first
             else {
